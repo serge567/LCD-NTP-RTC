@@ -12,7 +12,10 @@ ds1302 clk(SCLK, IO, CE);
 int main() 
 {
     //DS1302 RTC Module -->
+    const char *swd[8] = { "Undef", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
     clk.init();
+    bool bSynClock = false;
+    struct tm * timeinfo;
     unsigned char day;
     unsigned char mth;
     unsigned char year;
@@ -22,8 +25,7 @@ int main()
     unsigned char sec;
     clk.get_date(day, mth, year, dow);
     clk.get_time(hr, min, sec);
-
-    printf("RTC module date %d / %d / %d (%d), time %d : %d : %d \r\n", day, mth, year, dow, hr, min, sec);
+    printf("RTC module date and time: %s %d/%d/%d  %d:%d:%d \r\n", swd[dow], day, mth, year, hr, min, sec);
     // <-- DS1302 RTC Module
 
     printf("NTP Client example (using Ethernet)\r\n");
@@ -46,6 +48,26 @@ int main()
         else 
         {
             printf("Current time is %s\r\n", ctime(&timestamp));
+            if (!bSynClock)
+            {
+                bSynClock   = true;
+                timeinfo    = localtime(&timestamp);
+                day         = (unsigned char) timeinfo -> tm_mday;
+                mth         = (unsigned char) (timeinfo -> tm_mon + 1);
+                year        = (unsigned char) (timeinfo -> tm_year + 1900 - 2000);
+                dow         = (unsigned char) (timeinfo -> tm_wday + 1);
+                hr          = (unsigned char) timeinfo -> tm_hour;
+                min         = (unsigned char) timeinfo -> tm_min;
+                sec         = (unsigned char) timeinfo -> tm_sec;
+                clk.set_datetime(day, mth, year, dow, hr, min, sec);
+                printf("RTC module date and time: %s %d/%d/%d  %d:%d:%d synchronized with NTP sertver.\r\n", swd[dow], day, mth, year, hr, min, sec);
+            }
+            else 
+            {
+                clk.get_date(day, mth, year, dow);
+                clk.get_time(hr, min, sec);
+                printf("RTC module date and time: %s %d/%d/%d  %d:%d:%d \r\n", swd[dow], day, mth, year, hr, min, sec);
+            }
         }
         
         printf("Waiting 10 seconds before trying again...\r\n");
