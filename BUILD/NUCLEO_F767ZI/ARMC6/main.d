@@ -288,4 +288,7 @@ BUILD/NUCLEO_F767ZI/ARMC6/main.o: main.cpp \
   mbed-os/connectivity/netsocket/include/netsocket/OnboardNetworkStack.h \
   mbed-os/connectivity/netsocket/include/netsocket/L3IP.h \
   mbed-os/connectivity/netsocket/include/netsocket/PPP.h \
-  ntp-client/NTPClient.h
+  ntp-client/NTPClient.h textlcd/TextLCD.h \
+  mbed-os/platform/include/platform/Stream.h \
+  mbed-os/platform/include/platform/FileLike.h textlcd/TextLCD_Config.h \
+  textlcd/TextLCD_UDC.h
