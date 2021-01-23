@@ -5,6 +5,8 @@
 #include "TextLCD.h" // LCD 1602 with PCF8574, I2C bus
 #include <string>
  
+DigitalIn userButton(USER_BUTTON);
+
 //LCD 1602
 I2C i2c_lcd(D14,D15); // SDA, SCL
 // 1001110  - 0x4E
@@ -35,11 +37,19 @@ ds1302 clk(SCLK, IO, CE);
 // Interrupts
 bool bOneSecTick = false;
 
+string StrLeadZero(unsigned char number)
+{
+    string snumber = to_string(number);
+    if (snumber.length() == 1)
+    { snumber = "0" + snumber; }
+    return snumber;
+}
+
 void RTC_PrintDateTime()
 {
     clk.get_date(day, mth, year, dow);
     clk.get_time(hr, minu, sec);
-    printf("RTC module date and time: %s, %s %d, %d  %d:%d:%d \r\n", swd[dow], smth[mth], day, year + 2000, hr, minu, sec);   
+    printf("RTC module date and time: %s, %s %s, %d  %s:%s:%s \r\n", swd[dow], smth[mth], StrLeadZero(day).c_str(), year + 2000, StrLeadZero(hr).c_str(), StrLeadZero(minu).c_str(), StrLeadZero(sec).c_str());   
 }
 
 void RTC_Synch()
@@ -86,14 +96,7 @@ void RTC_Synch()
         clk.set_datetime(day, mth, year, dow, hr, minu, sec);
         printf("RTC module date and time: %s, %s %d, %d  %d:%d:%d synchronized with NTP sertver.\r\n", swd[dow], smth[mth], day, year + 2000, hr, minu, sec);   
     }
-}
-
-string StrLeadZero(unsigned char number)
-{
-    string snumber = to_string(number);
-    if (snumber.length() == 1)
-    { snumber = "0" + snumber; }
-    return snumber;
+    lcd.cls();
 }
 
 void LCDDisplayTime()
@@ -101,7 +104,7 @@ void LCDDisplayTime()
     clk.get_date(day, mth, year, dow);
     clk.get_time(hr, minu, sec);
     lcd.locate(0, 0);
-    lcd.printf("%s %s %d, %d ", swd[dow], smth[mth], day, year + 2000); 
+    lcd.printf("%s %s %s, %d ", swd[dow], smth[mth], StrLeadZero(day).c_str(), year + 2000); 
     lcd.locate(0, 1);    
     lcd.printf(" %s:%s:%s ", StrLeadZero(hr).c_str(), StrLeadZero(minu).c_str(), StrLeadZero(sec).c_str());
 }
@@ -132,10 +135,21 @@ int main()
     while(1)
     {
      //  ThisThread::sleep_for(1s);
-     if (bOneSecTick)
-     {
-        bOneSecTick = false;
-        LCDDisplayTime();
-     }
+        if (userButton && bOneSecTick) 
+        {  
+           lcd.cls();
+           lcd.locate(0, 0);
+           lcd.printf("%s", "USER BUTTON"); 
+           lcd.locate(0, 1);
+           lcd.printf("%s", "PRESSED!"); 
+           ThisThread::sleep_for(3s);
+           lcd.cls();
+           RTC_Synch(); 
+        } 
+        if (bOneSecTick)
+        {
+            bOneSecTick = false;
+            LCDDisplayTime();
+        }
     }
 }
