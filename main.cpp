@@ -78,9 +78,11 @@ void RTC_Synch()
     
     timestamp = ntp.get_timestamp();
     timestamp = timestamp + 3600 * 9; // Japan Time +9 hours offset
-    if (timestamp > 3820313209) 
+    year        = (unsigned char) (timeinfo -> tm_year + 1900 - 2000);
+
+    if ((year > 20) || (year < 25)) // 2020 and 2025 years
     {
-        printf("An error occurred when getting the time. Timestamp %u sec since 1900 must be > 3820313209\r\n", timestamp);
+        printf("An error occurred when getting the time. %d year got, it must be more 2020 and less 2025 \r\n", year + 2000);
     } 
     else 
     {
@@ -88,7 +90,6 @@ void RTC_Synch()
         timeinfo    = localtime(&timestamp);
         day         = (unsigned char) timeinfo -> tm_mday;
         mth         = (unsigned char) (timeinfo -> tm_mon + 1);
-        year        = (unsigned char) (timeinfo -> tm_year + 1900 - 2000);
         dow         = (unsigned char) (timeinfo -> tm_wday + 1);
         hr          = (unsigned char) timeinfo -> tm_hour;
         minu        = (unsigned char) timeinfo -> tm_min;
