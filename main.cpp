@@ -1,15 +1,11 @@
-#include "ATCmdParser.h"
 #include "mbed.h"
 #include "ds1302.h" // RTC module
 #include "TextLCD.h" // LCD 1602 with PCF8574, I2C bus
 #include <string>
 #include "Json.h"
 //WIFI
-#include "DigitalOut.h"
-#include "PinNames.h"
-#include "TCPSocket.h"
 #include "ESP8266Interface.h"
-#include "nsapi_types.h"
+
 
 //WIFI
 ESP8266Interface wifi(D1, D0);
