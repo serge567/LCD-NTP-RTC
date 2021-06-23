@@ -280,15 +280,9 @@ BUILD/NUCLEO_F767ZI/ARMC6/main.o: main.cpp \
   mbed-os/hal/include/hal/mpu_api.h \
   mbed-os/platform/include/platform/ScopedRamExecutionLock.h \
   mbed-os/platform/include/platform/mbed_stats.h ds1302/ds1302.h \
-  mbed-os/connectivity/netsocket/include/netsocket/EthernetInterface.h \
-  mbed-os/connectivity/netsocket/include/netsocket/EMACInterface.h \
-  mbed-os/connectivity/netsocket/include/netsocket/EMAC.h \
-  mbed-os/connectivity/netsocket/include/netsocket/EMACMemoryManager.h \
-  mbed-os/connectivity/netsocket/include/netsocket/NetStackMemoryManager.h \
-  mbed-os/connectivity/netsocket/include/netsocket/OnboardNetworkStack.h \
-  mbed-os/connectivity/netsocket/include/netsocket/L3IP.h \
-  mbed-os/connectivity/netsocket/include/netsocket/PPP.h \
-  ntp-client/NTPClient.h textlcd/TextLCD.h \
-  mbed-os/platform/include/platform/Stream.h \
+  textlcd/TextLCD.h mbed-os/platform/include/platform/Stream.h \
   mbed-os/platform/include/platform/FileLike.h textlcd/TextLCD_Config.h \
-  textlcd/TextLCD_UDC.h
+  textlcd/TextLCD_UDC.h JSON/Json.h JSON/jsmn.h \
+  mbed-os/connectivity/drivers/wifi/esp8266-driver/ESP8266Interface.h \
+  mbed-os/connectivity/drivers/wifi/esp8266-driver/ESP8266/ESP8266.h \
+  mbed-os/platform/include/platform/mbed_chrono.h
